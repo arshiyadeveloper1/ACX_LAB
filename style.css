@@ -2232,21 +2232,14 @@ body {
   padding: 12px 16px 14px;
 }
 
-/* Step 03 Showcase Mode: Non-clicking, Default Inactive State */
+/* Step 03 Showcase Mode: Non-clicking, Default Inactive State (Showcase Display Only) */
 #stageViewStep3,
-#stageViewStep3 * {
-  cursor: default !important;
-}
-
-#stageViewStep3 .review-frame,
-#stageViewStep3 .review-frame *,
-#stageViewStep3 .floating-comment-card,
-#stageViewStep3 .floating-comment-card *,
-#stageViewStep3 .floating-checklist-card,
-#stageViewStep3 .floating-checklist-card *,
-#stageViewStep3 .laptop-keyboard-deck {
+#stageViewStep3 *,
+#leftPaneStep3 .feature-item,
+#leftPaneStep3 .feature-icon-box {
   pointer-events: none !important;
   cursor: default !important;
+  user-select: none !important;
 }
 
 /* Laptop Keyboard Base Deck underneath */
