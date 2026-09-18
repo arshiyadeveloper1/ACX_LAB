@@ -866,92 +866,9 @@
   requestAnimationFrame(animateWave);
 
   // =========================================================================
-  // Step 03 Fleet Management Review Interactive Handlers
+  // Step 03: REVIEW WITH CONFIDENCE (Showcase Mode - Default Inactive State)
   // =========================================================================
-  // Fleet Sidebar Nav Switching
-  if (fleetNavBtns && fleetNavBtns.length > 0) {
-    fleetNavBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        fleetNavBtns.forEach(b => b.classList.remove('active-nav'));
-        btn.classList.add('active-nav');
-      });
-    });
-  }
-
-  // Time Range Dropdown Cycle
-  if (fleetTimeDropdown && fleetTimeLabel) {
-    const timeOptions = ['Last 7 days', 'Last 30 days', 'Today', 'Q3 Fleet View'];
-    let timeIndex = 0;
-    fleetTimeDropdown.addEventListener('click', () => {
-      timeIndex = (timeIndex + 1) % timeOptions.length;
-      fleetTimeLabel.textContent = timeOptions[timeIndex];
-      fleetTimeDropdown.style.transform = 'scale(0.96)';
-      setTimeout(() => {
-        fleetTimeDropdown.style.transform = '';
-      }, 150);
-    });
-  }
-
-  // Interactive Checklist Toggles
-  if (reviewChecklistStack) {
-    const checkRows = reviewChecklistStack.querySelectorAll('.checklist-row');
-    checkRows.forEach(row => {
-      row.addEventListener('click', () => {
-        const state = row.getAttribute('data-state');
-        const iconSpan = row.querySelector('.check-status-icon');
-        if (!iconSpan) return;
-
-        if (state === 'pass') {
-          row.setAttribute('data-state', 'warn');
-          row.className = 'checklist-row warn-row';
-          iconSpan.className = 'check-status-icon warn-icon';
-          iconSpan.innerHTML = '!';
-        } else if (state === 'warn') {
-          row.setAttribute('data-state', 'idle');
-          row.className = 'checklist-row idle-row';
-          iconSpan.className = 'check-status-icon idle-icon';
-          iconSpan.innerHTML = '';
-        } else {
-          row.setAttribute('data-state', 'pass');
-          row.className = 'checklist-row pass-row';
-          iconSpan.className = 'check-status-icon pass-icon';
-          iconSpan.innerHTML = `
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-          `;
-        }
-      });
-    });
-  }
-
-  // Evaluation Badges Click Interaction
-  if (fleetEvalPills && fleetEvalPills.length > 0) {
-    fleetEvalPills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        pill.style.transform = 'scale(1.06) translateY(-2px)';
-        pill.style.boxShadow = '0 0 16px rgba(56, 189, 248, 0.5)';
-        setTimeout(() => {
-          pill.style.transform = '';
-          pill.style.boxShadow = '';
-        }, 400);
-      });
-    });
-  }
-
-  // Pin / Truck Telemetry Highlight
-  if (mapPinCallout && truckTelemetryCard) {
-    mapPinCallout.addEventListener('click', () => {
-      truckTelemetryCard.style.transform = 'scale(1.08) translateY(-4px)';
-      truckTelemetryCard.style.borderColor = '#00f0ff';
-      truckTelemetryCard.style.boxShadow = '0 0 25px rgba(0, 240, 255, 0.8)';
-      setTimeout(() => {
-        truckTelemetryCard.style.transform = '';
-        truckTelemetryCard.style.borderColor = '';
-        truckTelemetryCard.style.boxShadow = '';
-      }, 1200);
-    });
-  }
+  // All elements in Step 03 are static showcase displays (no switching, no click reactions)
 
   // =========================================================================
   // Step 04: "ACCELERATORX VIVA" Live Audio Waveform, Timer & Interactive Controls
