@@ -272,8 +272,8 @@
     }
 
     const fullText = activeProblemText;
-    const typeSpeed = 22; // ms per char when typing forward
-    const pauseFullSentence = 2800; // 2.8s pause after typing full sentence to read before auto-switching
+    const typeSpeed = 10; // ms per char when typing forward (snappy, brisk typing)
+    const pauseFullSentence = 1300; // 1.3s pause after typing full sentence before switching to next module
 
     if (problemCharIndex < fullText.length) {
       problemCharIndex++;
@@ -289,7 +289,7 @@
       cursor.className = 'typing-cursor';
       problemTextElem.appendChild(cursor);
 
-      // Wait 2.8 seconds, then advance to next module in cyclic sequence
+      // Wait 1.3 seconds, then advance to next module in cyclic sequence
       problemLoopTimeout = setTimeout(advanceToNextModule, pauseFullSentence);
     }
   }
@@ -299,7 +299,7 @@
 
     // If user is hovering over categories or problem box to read, defer auto-switch
     if (isCategoryHovered) {
-      problemLoopTimeout = setTimeout(advanceToNextModule, 800);
+      problemLoopTimeout = setTimeout(advanceToNextModule, 500);
       return;
     }
 
@@ -370,7 +370,7 @@
       data.checklist.forEach((itemText, idx) => {
         const li = document.createElement('li');
         li.className = 'check-row';
-        li.style.animationDelay = `${idx * 45}ms`;
+        li.style.animationDelay = `${idx * 25}ms`;
         li.innerHTML = `
           <span class="check-circle-icon">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
