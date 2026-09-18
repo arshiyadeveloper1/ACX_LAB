@@ -2978,6 +2978,16 @@ body {
    STEP 04: DEFEND YOUR WORK ("ACCELERATORX VIVA" Live Stage)
    ========================================================================== */
 
+/* Step 04 Showcase Mode: Non-clicking, Default Inactive State (Showcase Display Only) */
+#stageViewStep4,
+#stageViewStep4 *,
+#leftPaneStep4 .feature-item,
+#leftPaneStep4 .feature-icon-box {
+  pointer-events: none !important;
+  cursor: default !important;
+  user-select: none !important;
+}
+
 /* 3D Perspective Wrap for Step 04 */
 .viva-perspective-wrap {
   perspective: 1200px;
@@ -2989,8 +2999,8 @@ body {
   position: relative;
 }
 
-/* Floating Glass Badges Docked to the Edges of Viva Window */.ship-floating-card,
-.viva-floating-card {
+/* Floating Glass Badges Docked to the Edges of Viva Window */
+.ship-floating-card {
   position: absolute;
   z-index: 30;
   display: flex;
@@ -3011,6 +3021,27 @@ body {
   user-select: none;
 }
 
+.viva-floating-card {
+  position: absolute;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2); /* ffffff - 20% opacity rule */
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 
+    0 14px 34px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  cursor: default !important;
+  pointer-events: none !important;
+  user-select: none;
+}
+
 .viva-floating-icon {
   display: flex;
   align-items: center;
@@ -3025,15 +3056,8 @@ body {
   left: -24px;
   transform: rotate(-6deg);
   animation: floatShakeCloud 3.2s ease-in-out infinite;
-}
-
-.badge-viva-cohort:hover {
-  animation-play-state: paused;
-  transform: scale(1.12) translateY(-4px) rotate(-6deg) !important;
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 
-    0 20px 42px rgba(0, 0, 0, 0.95),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  cursor: default !important;
+  pointer-events: none !important;
 }
 
 /* 2. Top-Right Corner: Code Brackets Badge */
@@ -3042,15 +3066,8 @@ body {
   right: -24px;
   transform: rotate(10deg);
   animation: floatShakeChart 3.6s ease-in-out infinite 0.4s;
-}
-
-.badge-viva-code:hover {
-  animation-play-state: paused;
-  transform: scale(1.12) translateY(-4px) rotate(10deg) !important;
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 
-    0 20px 42px rgba(0, 0, 0, 0.95),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  cursor: default !important;
+  pointer-events: none !important;
 }
 
 /* 3. Bottom-Right Corner: Graduation Cap Badge */
@@ -3059,15 +3076,8 @@ body {
   right: -24px;
   transform: rotate(-8deg);
   animation: floatShakeRocket 3.4s ease-in-out infinite 0.8s;
-}
-
-.badge-viva-grad:hover {
-  animation-play-state: paused;
-  transform: scale(1.12) translateY(-4px) rotate(-8deg) !important;
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 
-    0 20px 42px rgba(0, 0, 0, 0.95),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  cursor: default !important;
+  pointer-events: none !important;
 }
 
 /* Handwritten Annotation on Right Side: Explain. Defend. Grow. (Centered vertically) */
@@ -3121,14 +3131,8 @@ body {
   position: relative;
   z-index: 10;
   padding: 16px 20px 22px;
-}
-
-.viva-frame:hover {
-  transform: rotateY(-5deg) rotateX(3deg) translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 
-    0 30px 80px rgba(0, 0, 0, 0.98),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  cursor: default !important;
+  pointer-events: none !important;
 }
 
 /* Viva Header Bar */
@@ -3229,14 +3233,10 @@ body {
   border: none;
   color: #64748b;
   font-size: 1.1rem;
-  cursor: pointer;
+  cursor: default !important;
+  pointer-events: none !important;
   padding: 2px 4px;
   line-height: 1;
-  transition: color 0.2s ease;
-}
-
-.viva-header-menu-btn:hover {
-  color: var(--text-white);
 }
 
 /* Video Row: Mentor + Learner + Call Controls */
@@ -3256,12 +3256,8 @@ body {
   background: #070707;
   border: 1.5px solid rgba(255, 255, 255, 0.18); /* ffffff - 20% opacity rule */
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
-  transition: all 0.3s ease;
-}
-
-.viva-video-card:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: translateY(-2px);
+  cursor: default !important;
+  pointer-events: none !important;
 }
 
 /* Active Speaker Outline on Mentor Card */
@@ -3286,11 +3282,6 @@ body {
   object-fit: cover;
   object-position: center 20%;
   display: block;
-  transition: transform 0.4s ease;
-}
-
-.viva-video-card:hover .viva-webcam-img {
-  transform: scale(1.03);
 }
 
 .viva-video-top-right {
@@ -3313,14 +3304,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: default !important;
+  pointer-events: none !important;
   line-height: 1;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.viva-feed-dots-btn:hover {
-  background: rgba(0, 0, 0, 0.7);
-  color: #ffffff;
 }
 
 .viva-feed-label-pill {
@@ -3374,16 +3360,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.25s ease;
+  cursor: default !important;
+  pointer-events: none !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.viva-ctrl-btn:hover {
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.35);
-  background: rgba(35, 35, 35, 0.9);
-  transform: scale(1.08);
 }
 
 .viva-ctrl-btn.active-muted {
@@ -3397,12 +3376,8 @@ body {
   border-color: rgba(255, 255, 255, 0.3);
   color: #ffffff;
   box-shadow: 0 0 16px rgba(239, 68, 68, 0.55);
-}
-
-.viva-hangup-btn:hover {
-  box-shadow: 0 0 24px rgba(239, 68, 68, 0.85);
-  transform: scale(1.1);
-  background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+  cursor: default !important;
+  pointer-events: none !important;
 }
 
 /* Mentor Question Prompt Box */
@@ -3434,15 +3409,8 @@ body {
   box-shadow: 
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 4px 16px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.viva-question-bubble:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    0 4px 20px rgba(0, 0, 0, 0.6);
+  cursor: default !important;
+  pointer-events: none !important;
 }
 
 .viva-question-text {
@@ -3545,14 +3513,10 @@ body {
   border: none;
   color: #64748b;
   font-size: 1.1rem;
-  cursor: pointer;
+  cursor: default !important;
+  pointer-events: none !important;
   padding: 2px 4px;
   line-height: 1;
-  transition: color 0.2s ease;
-}
-
-.viva-more-btn:hover {
-  color: var(--text-white);
 }
 
 /* Keyframe animations */

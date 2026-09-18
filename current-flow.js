@@ -928,53 +928,7 @@
     }, 1000);
   }
 
-  // Interactive Viva Questions cycling
-  const vivaQuestions = [
-    "Why did you choose this architecture?",
-    "How would this service scale under 100k concurrent requests?",
-    "What trade-offs did you make with the database schema?",
-    "How do you handle zero-downtime database migrations?"
-  ];
-  let vivaQuestionIndex = 0;
-
-  if (vivaQuestionBubble) {
-    vivaQuestionBubble.addEventListener('click', () => {
-      vivaQuestionIndex = (vivaQuestionIndex + 1) % vivaQuestions.length;
-      if (vivaQuestionText) {
-        typeText(vivaQuestionText, vivaQuestions[vivaQuestionIndex]);
-      }
-    });
-  }
-
-  // Call Controls Toggles
-  if (btnVivaMic) {
-    btnVivaMic.addEventListener('click', () => {
-      audioVisualizerActive = !audioVisualizerActive;
-      btnVivaMic.classList.toggle('active-muted', !audioVisualizerActive);
-    });
-  }
-
-  if (btnVivaCam) {
-    btnVivaCam.addEventListener('click', () => {
-      btnVivaCam.classList.toggle('active-muted');
-      const learnerImg = document.querySelector('#learnerVideoCard .viva-webcam-img');
-      if (learnerImg) {
-        learnerImg.style.opacity = btnVivaCam.classList.contains('active-muted') ? '0.2' : '1';
-      }
-    });
-  }
-
-  if (btnVivaHangup) {
-    btnVivaHangup.addEventListener('click', () => {
-      btnVivaHangup.style.transform = 'scale(0.9)';
-      setTimeout(() => {
-        btnVivaHangup.style.transform = '';
-        if (vivaQuestionText) {
-          typeText(vivaQuestionText, "Viva defense session completed. Outstanding job defending your technical decisions!");
-        }
-      }, 200);
-    });
-  }
+  // Step 04 Showcase Mode: All elements are static showcase displays (no clicking format)
 
   // =========================================================================
   // Step 05: BUILDRX Interactive Sidebar Navigation & Deployment Simulation
@@ -1109,8 +1063,7 @@
           let targetFrame = null;
           if (currentStep === 1) targetFrame = tabletFrame;
           else if (currentStep === 2) targetFrame = workspaceFrame;
-          else if (currentStep === 3) targetFrame = reviewFrame;
-          else if (currentStep === 4) targetFrame = vivaFrame;
+          // Step 3 & Step 4 are static showcase cards with default perspective and zero cursor reaction
           else if (currentStep === 5) targetFrame = shipFrame;
 
           if (targetFrame) {
