@@ -272,8 +272,9 @@
     }
 
     const fullText = activeProblemText;
-    const typeSpeed = 10; // ms per char when typing forward (snappy, brisk typing)
-    const pauseFullSentence = 1300; // 1.3s pause after typing full sentence before switching to next module
+    // Calibrated so each module fully types and switches within 4 seconds (~1.8s typing + ~2.2s read pause)
+    const typeSpeed = Math.max(10, Math.floor(1800 / (fullText.length || 1)));
+    const pauseFullSentence = 2200; // ~2.2s pause after typing -> exactly ~4 seconds total per module
 
     if (problemCharIndex < fullText.length) {
       problemCharIndex++;
@@ -289,7 +290,7 @@
       cursor.className = 'typing-cursor';
       problemTextElem.appendChild(cursor);
 
-      // Wait 1.3 seconds, then advance to next module in cyclic sequence
+      // Advance to next module at the 4-second mark
       problemLoopTimeout = setTimeout(advanceToNextModule, pauseFullSentence);
     }
   }
