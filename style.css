@@ -998,6 +998,17 @@ body {
   gap: 7px;
 }
 
+@keyframes checkRowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .check-row {
   display: flex;
   align-items: center;
@@ -1007,6 +1018,7 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: color 0.2s ease;
+  animation: checkRowFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .check-row:hover {

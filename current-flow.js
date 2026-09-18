@@ -240,18 +240,31 @@
   // Current active step tracker (1, 2, 3, 4, or 5)
   let currentStep = 1;
 
-  // Typewriter effect state
   // =========================================================================
-  // Typewriter Loop Engine for Step 01 Business Problem Sentence
+  // Step 01 Category Auto-Switch & Typewriter Loop Engine
   // =========================================================================
+  const categoryKeys = [
+    'business',
+    'fintech',
+    'healthcare',
+    'education',
+    'logistics',
+    'ecommerce',
+    'sustainability',
+    'other'
+  ];
+  let currentCategoryIndex = 0;
+  let isCategoryHovered = false;
   let problemLoopTimeout = null;
   let activeProblemText = categoryData.business.problem;
   let problemCharIndex = 0;
-  let isProblemDeleting = false;
 
   function runProblemTypewriterLoop() {
     if (!problemTextElem) return;
-    if (problemLoopTimeout) clearTimeout(problemLoopTimeout);
+    if (problemLoopTimeout) {
+      clearTimeout(problemLoopTimeout);
+      problemLoopTimeout = null;
+    }
 
     // Only run if currently on Step 01
     if (currentStep !== 1) {
@@ -259,55 +272,49 @@
     }
 
     const fullText = activeProblemText;
-    const typeSpeed = 26; // ms per char when typing forward
-    const backspaceSpeed = 12; // ms per char when deleting backward
-    const pauseFullSentence = 2800; // 2.8s pause after typing full sentence
-    const pauseEmptySentence = 450; // 450ms pause after deletion before typing again
+    const typeSpeed = 22; // ms per char when typing forward
+    const pauseFullSentence = 2800; // 2.8s pause after typing full sentence to read before auto-switching
 
-    if (!isProblemDeleting) {
-      // Typing forward
-      if (problemCharIndex < fullText.length) {
-        problemCharIndex++;
-        problemTextElem.textContent = fullText.slice(0, problemCharIndex);
-        const cursor = document.createElement('span');
-        cursor.className = 'typing-cursor';
-        problemTextElem.appendChild(cursor);
-        problemLoopTimeout = setTimeout(runProblemTypewriterLoop, typeSpeed);
-      } else {
-        // Complete sentence reached
-        problemTextElem.textContent = fullText;
-        const cursor = document.createElement('span');
-        cursor.className = 'typing-cursor';
-        problemTextElem.appendChild(cursor);
-        isProblemDeleting = true;
-        problemLoopTimeout = setTimeout(runProblemTypewriterLoop, pauseFullSentence);
-      }
+    if (problemCharIndex < fullText.length) {
+      problemCharIndex++;
+      problemTextElem.textContent = fullText.slice(0, problemCharIndex);
+      const cursor = document.createElement('span');
+      cursor.className = 'typing-cursor';
+      problemTextElem.appendChild(cursor);
+      problemLoopTimeout = setTimeout(runProblemTypewriterLoop, typeSpeed);
     } else {
-      // Deleting backwards
-      if (problemCharIndex > 0) {
-        problemCharIndex--;
-        problemTextElem.textContent = fullText.slice(0, problemCharIndex);
-        const cursor = document.createElement('span');
-        cursor.className = 'typing-cursor';
-        problemTextElem.appendChild(cursor);
-        problemLoopTimeout = setTimeout(runProblemTypewriterLoop, backspaceSpeed);
-      } else {
-        // Empty sentence reached
-        problemTextElem.textContent = '';
-        const cursor = document.createElement('span');
-        cursor.className = 'typing-cursor';
-        problemTextElem.appendChild(cursor);
-        isProblemDeleting = false;
-        problemLoopTimeout = setTimeout(runProblemTypewriterLoop, pauseEmptySentence);
-      }
+      // Complete sentence reached
+      problemTextElem.textContent = fullText;
+      const cursor = document.createElement('span');
+      cursor.className = 'typing-cursor';
+      problemTextElem.appendChild(cursor);
+
+      // Wait 2.8 seconds, then advance to next module in cyclic sequence
+      problemLoopTimeout = setTimeout(advanceToNextModule, pauseFullSentence);
     }
+  }
+
+  function advanceToNextModule() {
+    if (currentStep !== 1) return;
+
+    // If user is hovering over categories or problem box to read, defer auto-switch
+    if (isCategoryHovered) {
+      problemLoopTimeout = setTimeout(advanceToNextModule, 800);
+      return;
+    }
+
+    // Advance to next module in sequence
+    currentCategoryIndex = (currentCategoryIndex + 1) % categoryKeys.length;
+    selectCategory(categoryKeys[currentCategoryIndex]);
   }
 
   function setProblemText(newText) {
     activeProblemText = newText;
     problemCharIndex = 0;
-    isProblemDeleting = false;
-    if (problemLoopTimeout) clearTimeout(problemLoopTimeout);
+    if (problemLoopTimeout) {
+      clearTimeout(problemLoopTimeout);
+      problemLoopTimeout = null;
+    }
     if (problemTextElem) {
       problemTextElem.textContent = '';
       const cursor = document.createElement('span');
@@ -315,6 +322,91 @@
       problemTextElem.appendChild(cursor);
     }
     runProblemTypewriterLoop();
+  }
+
+  function selectCategory(catKey) {
+    const data = categoryData[catKey];
+    if (!data) return;
+
+    const keyIndex = categoryKeys.indexOf(catKey);
+    if (keyIndex !== -1) {
+      currentCategoryIndex = keyIndex;
+    }
+
+    // Toggle active class on categories
+    catButtons.forEach(btn => {
+      if (btn.getAttribute('data-cat') === catKey) {
+        btn.classList.add('active');
+        if (typeof btn.scrollIntoView === 'function') {
+          btn.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    // Update Industry Pill
+    if (industryValElem) industryValElem.textContent = data.industry;
+
+    // Update Complexity Pill
+    if (complexityValElem) complexityValElem.textContent = data.complexity;
+    if (complexityBars) {
+      const bars = complexityBars.querySelectorAll('.s-bar');
+      bars.forEach((bar, idx) => {
+        if (idx < data.complexityBars) {
+          bar.classList.add('active-orange');
+        } else {
+          bar.classList.remove('active-orange');
+        }
+      });
+    }
+
+    // Update Impact Pill
+    if (impactValElem) impactValElem.textContent = data.impact;
+
+    // Update Checklist Items
+    if (checklistListElem) {
+      checklistListElem.innerHTML = '';
+      data.checklist.forEach((itemText, idx) => {
+        const li = document.createElement('li');
+        li.className = 'check-row';
+        li.style.animationDelay = `${idx * 45}ms`;
+        li.innerHTML = `
+          <span class="check-circle-icon">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </span>
+          <span class="check-text">${itemText}</span>
+        `;
+        checklistListElem.appendChild(li);
+      });
+    }
+
+    // Animate Problem text with typewriter loop
+    setProblemText(data.problem);
+  }
+
+  // Category Switch Click Listeners (Step 01)
+  catButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const catKey = btn.getAttribute('data-cat');
+      if (catKey) {
+        selectCategory(catKey);
+      }
+    });
+  });
+
+  // Pause auto-switching when user hovers over the category list or the problem box
+  const categoriesSidebarElem = document.querySelector('.categories-sidebar');
+  const problemTextAreaElem = document.getElementById('problemTextArea');
+  if (categoriesSidebarElem) {
+    categoriesSidebarElem.addEventListener('mouseenter', () => { isCategoryHovered = true; });
+    categoriesSidebarElem.addEventListener('mouseleave', () => { isCategoryHovered = false; });
+  }
+  if (problemTextAreaElem) {
+    problemTextAreaElem.addEventListener('mouseenter', () => { isCategoryHovered = true; });
+    problemTextAreaElem.addEventListener('mouseleave', () => { isCategoryHovered = false; });
   }
 
   // Generic one-shot typewriter helper (used for Viva questions and prompts)
@@ -344,61 +436,6 @@
     }
     step();
   }
-
-  // =========================================================================
-  // Category Switch Handler (Step 01)
-  // =========================================================================
-  catButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const catKey = btn.getAttribute('data-cat');
-      const data = categoryData[catKey];
-      if (!data) return;
-
-      // Toggle active class on categories
-      catButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      // Animate Problem text with typewriter loop
-      setProblemText(data.problem);
-
-      // Update Industry Pill
-      if (industryValElem) industryValElem.textContent = data.industry;
-
-      // Update Complexity Pill
-      if (complexityValElem) complexityValElem.textContent = data.complexity;
-      if (complexityBars) {
-        const bars = complexityBars.querySelectorAll('.s-bar');
-        bars.forEach((bar, idx) => {
-          if (idx < data.complexityBars) {
-            bar.classList.add('active-orange');
-          } else {
-            bar.classList.remove('active-orange');
-          }
-        });
-      }
-
-      // Update Impact Pill
-      if (impactValElem) impactValElem.textContent = data.impact;
-
-      // Update Checklist Items
-      if (checklistListElem) {
-        checklistListElem.innerHTML = '';
-        data.checklist.forEach(itemText => {
-          const li = document.createElement('li');
-          li.className = 'check-row';
-          li.innerHTML = `
-            <span class="check-circle-icon">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </span>
-            <span class="check-text">${itemText}</span>
-          `;
-          checklistListElem.appendChild(li);
-        });
-      }
-    });
-  });
 
   // =========================================================================
   // Master Step Navigation Engine: Steps 01, 02, 03, 04, and 05
@@ -514,16 +551,8 @@
       if (stageViewStep1) stageViewStep1.classList.add('active');
       if (stepCounterDisplay) stepCounterDisplay.textContent = '01 / 05';
 
-      // Start looping typewriter animation for Business Problem sentence
-      problemCharIndex = 0;
-      isProblemDeleting = false;
-      if (problemTextElem) {
-        problemTextElem.textContent = '';
-        const cursor = document.createElement('span');
-        cursor.className = 'typing-cursor';
-        problemTextElem.appendChild(cursor);
-      }
-      runProblemTypewriterLoop();
+      // Start or resume module auto-switch loop for current active category
+      selectCategory(categoryKeys[currentCategoryIndex] || 'business');
 
       if (stepNode1) {
         stepNode1.classList.add('active');
