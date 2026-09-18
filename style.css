@@ -920,28 +920,13 @@ body {
   font-size: 0.78rem;
   color: var(--text-white);
   font-weight: 500;
-  cursor: pointer;
+  cursor: default;
   user-select: none;
-  transition: all 0.2s ease;
-}
-
-.param-pill-select:hover,
-.param-pill-badge:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-  background: #0a1120;
-}
-
-.param-pill-select {
-  justify-content: space-between;
+  pointer-events: none;
 }
 
 .param-icon {
   color: #94a3b8;
-  flex-shrink: 0;
-}
-
-.chevron-down {
-  color: #64748b;
   flex-shrink: 0;
 }
 
