@@ -544,6 +544,14 @@
       }
     }
 
+    // Stop Step 02 auto-switch loop when navigating away from Step 02
+    if (targetStep !== 2) {
+      if (step2SwitchTimeout) {
+        clearTimeout(step2SwitchTimeout);
+        step2SwitchTimeout = null;
+      }
+    }
+
     // -----------------------------------------------------------------------
     // STEP 01: REAL PROJECTS
     // -----------------------------------------------------------------------
@@ -580,6 +588,9 @@
       if (leftPaneStep2) leftPaneStep2.classList.add('active');
       if (stageViewStep2) stageViewStep2.classList.add('active');
       if (stepCounterDisplay) stepCounterDisplay.textContent = '02 / 05';
+
+      // Start Step 2 module auto-switch loop (3 seconds duration)
+      selectStep2Module(step2Modules[currentStep2Index] || 'App.tsx');
 
       // Node 02 active with <> code icon
       if (stepNode2) {
@@ -737,56 +748,102 @@
     });
   }
 
-  // Step 02 Status Bar click -> Advance to Step 03 REVIEW
-  if (workspaceStatusbar) {
-    workspaceStatusbar.style.cursor = 'pointer';
-    workspaceStatusbar.title = 'Click to proceed to 03 REVIEW';
-    workspaceStatusbar.addEventListener('click', () => {
-      goToStep(3);
-    });
-  }
-
   // =========================================================================
-  // Step 02 Code Editor Tab Switching & Wave Animation
+  // Step 02 Module Auto-Switch Engine (App.tsx -> routes.ts -> data.ts)
   // =========================================================================
-  editorTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      editorTabs.forEach(t => t.classList.remove('active-editor-tab'));
-      tab.classList.add('active-editor-tab');
+  const step2Modules = ['App.tsx', 'routes.ts', 'data.ts'];
+  let currentStep2Index = 0;
+  let step2SwitchTimeout = null;
+  let isStep2Hovered = false;
 
-      const fileName = tab.querySelector('.tab-title-text').textContent.trim();
-      const lines = codeSnippets[fileName];
+  function selectStep2Module(fileName) {
+    const fileIndex = step2Modules.indexOf(fileName);
+    if (fileIndex !== -1) {
+      currentStep2Index = fileIndex;
+    }
 
-      if (lines && codeLinesBlock) {
-        codeLinesBlock.innerHTML = '';
-        lines.forEach((lineStr, idx) => {
-          const lineDiv = document.createElement('div');
-          lineDiv.className = idx === 1 ? 'code-line indent-code' : 'code-line';
-          if (lineStr === '') lineDiv.className = 'code-line empty-line';
-          lineDiv.innerHTML = lineStr || '&nbsp;';
-          codeLinesBlock.appendChild(lineDiv);
-        });
+    // 1. Update file tree selection (only the 3 modules under src)
+    const subGroupFiles = document.querySelectorAll('.tree-sub-group .tree-row.file-item');
+    subGroupFiles.forEach(row => {
+      const nameElem = row.querySelector('.tree-item-name');
+      if (nameElem && nameElem.textContent.trim() === fileName) {
+        row.classList.add('selected-file');
+      } else {
+        row.classList.remove('selected-file');
       }
     });
-  });
 
-  fileTreeItems.forEach(row => {
+    // 2. Update editor tabs
+    editorTabs.forEach(tab => {
+      const tabTitle = tab.querySelector('.tab-title-text');
+      if (tabTitle && tabTitle.textContent.trim() === fileName) {
+        tab.classList.add('active-editor-tab');
+      } else {
+        tab.classList.remove('active-editor-tab');
+      }
+    });
+
+    // 3. Update code lines viewport
+    const lines = codeSnippets[fileName];
+    if (lines && codeLinesBlock) {
+      codeLinesBlock.innerHTML = '';
+      lines.forEach((lineStr, idx) => {
+        const lineDiv = document.createElement('div');
+        lineDiv.className = idx === 1 ? 'code-line indent-code' : 'code-line';
+        if (lineStr === '') lineDiv.className = 'code-line empty-line';
+        lineDiv.innerHTML = lineStr || '&nbsp;';
+        codeLinesBlock.appendChild(lineDiv);
+      });
+    }
+
+    // Schedule next auto-switch in 3 seconds if on Step 2
+    scheduleStep2NextModule();
+  }
+
+  function scheduleStep2NextModule() {
+    if (step2SwitchTimeout) {
+      clearTimeout(step2SwitchTimeout);
+      step2SwitchTimeout = null;
+    }
+
+    if (currentStep !== 2) return;
+
+    step2SwitchTimeout = setTimeout(() => {
+      if (currentStep !== 2) return;
+      if (isStep2Hovered) {
+        scheduleStep2NextModule();
+        return;
+      }
+      currentStep2Index = (currentStep2Index + 1) % step2Modules.length;
+      selectStep2Module(step2Modules[currentStep2Index]);
+    }, 3000); // exactly 3 seconds duration
+  }
+
+  // Click listeners ONLY on the 3 module items under src
+  const step2ModuleElements = document.querySelectorAll('.tree-sub-group .tree-row.file-item');
+  step2ModuleElements.forEach(row => {
     row.addEventListener('click', () => {
-      fileTreeItems.forEach(r => r.classList.remove('selected-file'));
-      row.classList.add('selected-file');
-
       const nameElem = row.querySelector('.tree-item-name');
       if (nameElem) {
         const fName = nameElem.textContent.trim();
-        editorTabs.forEach(tab => {
-          if (tab.querySelector('.tab-title-text').textContent.trim() === fName) {
-            tab.click();
-          }
-        });
+        selectStep2Module(fName);
       }
     });
   });
 
+  // Pause auto-switching when user hovers over files panel or code editor
+  const filesPanelElem = document.querySelector('.panel-files');
+  const codeEditorPanelElem = document.querySelector('.panel-code-editor');
+  if (filesPanelElem) {
+    filesPanelElem.addEventListener('mouseenter', () => { isStep2Hovered = true; });
+    filesPanelElem.addEventListener('mouseleave', () => { isStep2Hovered = false; });
+  }
+  if (codeEditorPanelElem) {
+    codeEditorPanelElem.addEventListener('mouseenter', () => { isStep2Hovered = true; });
+    codeEditorPanelElem.addEventListener('mouseleave', () => { isStep2Hovered = false; });
+  }
+
+  // Background wave animation in Live Preview
   let waveTime = 0;
   function animateWave() {
     if (previewWaveLine && previewWaveArea && currentStep === 2) {
@@ -807,22 +864,6 @@
     requestAnimationFrame(animateWave);
   }
   requestAnimationFrame(animateWave);
-
-  if (btnRefreshPreview) {
-    btnRefreshPreview.addEventListener('click', () => {
-      btnRefreshPreview.style.transform = 'rotate(360deg)';
-      const metricDigits = document.querySelectorAll('.metric-big-digits');
-      if (metricDigits.length >= 2) {
-        metricDigits[0].textContent = '129';
-        metricDigits[1].textContent = '44';
-        setTimeout(() => {
-          metricDigits[0].textContent = '128';
-          metricDigits[1].textContent = '42';
-          btnRefreshPreview.style.transform = '';
-        }, 1200);
-      }
-    });
-  }
 
   // =========================================================================
   // Step 03 Fleet Management Review Interactive Handlers
