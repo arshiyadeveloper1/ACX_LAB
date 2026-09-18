@@ -913,16 +913,34 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #090909;
-  border: 1px solid rgba(255, 255, 255, 0.2); /* #ffffff - 20% opacity */
+  background: #090909 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 0.78rem;
-  color: var(--text-white);
+  color: var(--text-white) !important;
   font-weight: 500;
-  cursor: default;
-  user-select: none;
-  pointer-events: none;
+  cursor: default !important;
+  user-select: none !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  outline: none !important;
+}
+
+.param-pill-select:hover,
+.param-pill-badge:hover,
+.param-col:hover .param-pill-badge,
+.param-col:hover .param-pill-select,
+#paramIndustry:hover,
+#paramComplexity:hover,
+#paramImpact:hover {
+  background: #090909 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: var(--text-white) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  cursor: default !important;
 }
 
 .param-icon {
