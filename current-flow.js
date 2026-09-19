@@ -928,7 +928,14 @@
     }, 1000);
   }
 
-  // Step 04 Showcase Mode: All elements are static showcase displays (no clicking format)
+  // Interactive Viva Questions cycling
+  const vivaQuestions = [
+    "Why did you choose this architecture?",
+    "How would this service scale under 100k concurrent requests?",
+    "What trade-offs did you make with the database schema?",
+    "How do you handle zero-downtime database migrations?"
+  ];
+  // Step 04: Inactive showcase mode (waveform animation & audio timer run continuously, no click actions)
 
   // =========================================================================
   // Step 05: BUILDRX Interactive Sidebar Navigation & Deployment Simulation
@@ -1063,7 +1070,8 @@
           let targetFrame = null;
           if (currentStep === 1) targetFrame = tabletFrame;
           else if (currentStep === 2) targetFrame = workspaceFrame;
-          // Step 3 & Step 4 are static showcase cards with default perspective and zero cursor reaction
+          else if (currentStep === 3) targetFrame = reviewFrame;
+          else if (currentStep === 4) targetFrame = vivaFrame;
           else if (currentStep === 5) targetFrame = shipFrame;
 
           if (targetFrame) {

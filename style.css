@@ -2978,16 +2978,6 @@ body {
    STEP 04: DEFEND YOUR WORK ("ACCELERATORX VIVA" Live Stage)
    ========================================================================== */
 
-/* Step 04 Showcase Mode: Non-clicking, Default Inactive State (Showcase Display Only) */
-#stageViewStep4,
-#stageViewStep4 *,
-#leftPaneStep4 .feature-item,
-#leftPaneStep4 .feature-icon-box {
-  pointer-events: none !important;
-  cursor: default !important;
-  user-select: none !important;
-}
-
 /* 3D Perspective Wrap for Step 04 */
 .viva-perspective-wrap {
   perspective: 1200px;
@@ -2999,28 +2989,7 @@ body {
   position: relative;
 }
 
-/* Floating Glass Badges Docked to the Edges of Viva Window */
-.ship-floating-card {
-  position: absolute;
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 15px;
-  border: 1.5px solid rgba(255, 255, 255, 0.2); /* ffffff - 20% opacity rule */
-  background: rgba(10, 10, 10, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 
-    0 14px 34px rgba(0, 0, 0, 0.85),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  user-select: none;
-}
-
+/* Floating Glass Badges Docked to the Edges of Viva Window */.ship-floating-card,
 .viva-floating-card {
   position: absolute;
   z-index: 30;
@@ -3039,6 +3008,7 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   cursor: default !important;
   pointer-events: none !important;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
 }
 
@@ -3050,34 +3020,28 @@ body {
 }
 
 /* Specific Badge Positions Docked to Corners as shown in user's sketch */
-/* 1. Top-Left Corner: People / Cohort Badge */
+/* 1. Top-Left Corner: People / Cohort Badge (Continuous movement) */
 .badge-viva-cohort {
   top: -24px;
   left: -24px;
   transform: rotate(-6deg);
   animation: floatShakeCloud 3.2s ease-in-out infinite;
-  cursor: default !important;
-  pointer-events: none !important;
 }
 
-/* 2. Top-Right Corner: Code Brackets Badge */
+/* 2. Top-Right Corner: Code Brackets Badge (Continuous movement) */
 .badge-viva-code {
   top: -24px;
   right: -24px;
   transform: rotate(10deg);
   animation: floatShakeChart 3.6s ease-in-out infinite 0.4s;
-  cursor: default !important;
-  pointer-events: none !important;
 }
 
-/* 3. Bottom-Right Corner: Graduation Cap Badge */
+/* 3. Bottom-Right Corner: Graduation Cap Badge (Continuous movement) */
 .badge-viva-grad {
   bottom: -24px;
   right: -24px;
   transform: rotate(-8deg);
   animation: floatShakeRocket 3.4s ease-in-out infinite 0.8s;
-  cursor: default !important;
-  pointer-events: none !important;
 }
 
 /* Handwritten Annotation on Right Side: Explain. Defend. Grow. (Centered vertically) */
@@ -3131,8 +3095,37 @@ body {
   position: relative;
   z-index: 10;
   padding: 16px 20px 22px;
+}
+
+.viva-frame:hover {
+  transform: rotateY(-5deg) rotateX(3deg) translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.98),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Step 04 Showcase Mode: Everything inside the card is locked into an inactive default state */
+#vivaFrame,
+#vivaFrame * {
   cursor: default !important;
+}
+
+#vivaFrame .viva-header-bar,
+#vivaFrame .viva-header-bar *,
+#vivaFrame .viva-video-row,
+#vivaFrame .viva-video-row *,
+#vivaFrame .viva-question-box,
+#vivaFrame .viva-question-box *,
+#vivaFrame .viva-audio-telemetry-bar,
+#vivaFrame .viva-audio-telemetry-bar *,
+#vivaFrame .viva-floating-card,
+#vivaFrame .viva-floating-card *,
+#vivaFrame .viva-handwritten-annotation,
+#vivaFrame .viva-handwritten-annotation * {
   pointer-events: none !important;
+  cursor: default !important;
+  user-select: none !important;
 }
 
 /* Viva Header Bar */
